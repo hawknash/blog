@@ -41,6 +41,7 @@ router.post("/signup", (req, res) => {
           .save()
           .then((user) => {
             console.log(user);
+            console.log(user.email);
             transporter.sendMail({
               to: user.email,
               from: "no-reply@bloggers.com",
