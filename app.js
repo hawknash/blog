@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const mongoose = require("mongoose");
-//const { MONGOURI } = require("./config/keys");
-const MONGOURI =
-  "mongodb+srv://naman:rRFLCmKvyIYoN48j@cluster0-4tuok.mongodb.net/test?retryWrites=true&w=majority";
+const { MONGOURI } = require("./config/keys");
+//const MONGOURI =
+//"mongodb+srv://naman:rRFLCmKvyIYoN48j@cluster0-4tuok.mongodb.net/test?retryWrites=true&w=majority";
 const cors = require("cors");
 
 mongoose.connect(MONGOURI, {
