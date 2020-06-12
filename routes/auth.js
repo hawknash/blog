@@ -2,10 +2,23 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/keys");
 const requireLogin = require("../midlleware/requireLogin");
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+//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
+
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key:
+        "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",
+    },
+  })
+);
 
 router.post("/signup", (req, res) => {
   const { name, email, password, pic } = req.body;
@@ -27,7 +40,13 @@ router.post("/signup", (req, res) => {
         user
           .save()
           .then((user) => {
-            res.json({ message: "saved successfully" });
+            transporter.sendMail({
+              to: user.email,
+              from: "no-reply@bloggers.com",
+              subject: "Sign Up",
+              html: "<h1>Welcome to Bloggers</h1>",
+            });
+            res.json({ message: "Saved Successfully" });
           })
           .catch((err) => {
             console.log(err);
@@ -67,6 +86,59 @@ router.post("/signin", (req, res) => {
         console.log(err);
       });
   });
+});
+
+router.post("/resetpassword", (req, res) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+    }
+    const token = buffer.toString("hex");
+    User.findOne({ email: req.body.email }).then((user) => {
+      if (!user) {
+        return res.status(422).json({ error: "User doesn't Exists" });
+      }
+      user.resetToken = token;
+      user.expireToken = Date.now() + 3600000;
+      user.save().then((result) => {
+        transporter.sendMail({
+          to: user.email,
+          from: "no-reply@bloggers.com",
+          subject: "Reset Password",
+          html: `
+          <p>Reset Password</p>
+          <h5>Click on this link to <a href="/reset/${token}">reset your password</a></h5>
+          `,
+        });
+        res.json({ message: "Check your Email" });
+      });
+    });
+  });
+});
+
+router.post("/new-password", (req, res) => {
+  const newPassword = req.body.password;
+  const sentToken = req.body.token;
+  User.findOne({
+    resetToken: sentToken,
+    expireToken: { $gt: Date.now() },
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(422).json({ error: "Try Again,Session Expired" });
+      }
+      bcrypt.hash(newPassword, 12).then((hashedpassword) => {
+        user.password = hashedpassword;
+        user.resetToken = undefined;
+        user.expireToken = undefined;
+        user.save().then((savedUser) => {
+          res.json({ message: "Password Updated" });
+        });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 module.exports = router;
