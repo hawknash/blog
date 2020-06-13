@@ -50,7 +50,7 @@ router.post("/signup", (req, res) => {
             // console.log(user);
             // res.json({ message: "Saved Successfully" });
             const templateParams = {
-              from_name: email,
+              from_name: user.email,
               to_name: "no-reply@thebolggers.com",
               subject: "Sign Up",
               message_html: "<h1>Welcome to Bloggers</h1>",
@@ -62,6 +62,7 @@ router.post("/signup", (req, res) => {
               templateParams,
               "user_krkTTojdKoI3rSUV9IM9x"
             );
+            res.json({ message: "Saved Successfully" });
           })
           .catch((err) => {
             console.log(err);
