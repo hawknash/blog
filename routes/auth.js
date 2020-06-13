@@ -24,12 +24,12 @@ const transporter = nodemailer.createTransport(
 router.post("/signup", (req, res) => {
   const { name, email, password, pic } = req.body;
   if (!email || !password || !name) {
-    res.status(422).json({ error: "Please add all the field" });
+    return res.status(422).json({ error: "Please add all the field" });
   }
   User.findOne({ email: email })
     .then((savedUser) => {
       if (savedUser) {
-        res.status(422).json({ error: "User already exist" });
+        return res.status(422).json({ error: "User already exist" });
       }
       bcrypt.hash(password, 12).then((hashedpassword) => {
         const user = new User({
@@ -49,19 +49,53 @@ router.post("/signup", (req, res) => {
             // });
             // console.log(user);
             // res.json({ message: "Saved Successfully" });
-            const templateParams = {
-              from_name: user.email,
-              to_name: "no-reply@thebolggers.com",
-              subject: "Sign Up",
-              message_html: "<h1>Welcome to Bloggers</h1>",
-            };
+            // const templateParams = {
+            //   from_name: user.email,
+            //   to_name: "no-reply@thebolggers.com",
+            //   subject: "Sign Up",
+            //   message_html: "<h1>Welcome to Bloggers</h1>",
+            // };
 
-            emailjs.send(
-              "gmail",
-              "template_lUZQmoEa",
-              templateParams,
-              "user_krkTTojdKoI3rSUV9IM9x"
+            // emailjs.send(
+            //   "gmail",
+            //   "template_lUZQmoEa",
+            //   templateParams,
+            //   "user_krkTTojdKoI3rSUV9IM9x"
+            // );
+
+            const mailjet = require("node-mailjet").connect(
+              "93a1b5b16e9e9ec4051ed89e5eef2ae8",
+              "4569e58b492ac4487466b86f5cb13ce0"
             );
+            const request = mailjet.post("send", { version: "v3.1" }).request({
+              Messages: [
+                {
+                  From: {
+                    Email: "namansharma885959168@gmail.com",
+                    Name: "Naman",
+                  },
+                  To: [
+                    {
+                      Email: "namansharma168@gmail.com",
+                      Name: "Naman",
+                    },
+                  ],
+                  Subject: "Greetings from Mailjet.",
+                  TextPart: "My first Mailjet email",
+                  HTMLPart:
+                    "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
+                  CustomID: "AppGettingStartedTest",
+                },
+              ],
+            });
+            request
+              .then((result) => {
+                console.log(result.body);
+              })
+              .catch((err) => {
+                console.log(err.statusCode);
+              });
+
             res.json({ message: "Saved Successfully" });
           })
           .catch((err) => {
