@@ -114,7 +114,7 @@ router.post("/resetpassword", (req, res) => {
           `,
         });
         console.log(user);
-        res.json({ message: "Check your Email" });
+        res.json({ message: "Check your Email" + user.toString() });
       });
     });
   });
