@@ -113,6 +113,7 @@ router.post("/resetpassword", (req, res) => {
           <h5>Click on this link to <a href="/reset/${token}">reset your password</a></h5>
           `,
         });
+        console.log(user);
         res.json({ message: "Check your Email" });
       });
     });
