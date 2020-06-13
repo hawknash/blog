@@ -9,7 +9,7 @@ const { JWT_SECRET } = require("../config/keys");
 const requireLogin = require("../midlleware/requireLogin");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
-import * as emailjs from "emailjs-com";
+const emailjs = require("emailjs-com");
 //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
 
 const transporter = nodemailer.createTransport(
