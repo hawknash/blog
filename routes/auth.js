@@ -48,6 +48,7 @@ router.post("/signup", (req, res) => {
               subject: "Sign Up",
               html: "<h1>Welcome to Bloggers</h1>",
             });
+            console.log(user);
             res.json({ message: "Saved Successfully" });
           })
           .catch((err) => {
