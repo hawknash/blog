@@ -9,6 +9,7 @@ const { JWT_SECRET } = require("../config/keys");
 const requireLogin = require("../midlleware/requireLogin");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
+import * as emailjs from "emailjs-com";
 //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
 
 const transporter = nodemailer.createTransport(
@@ -40,16 +41,27 @@ router.post("/signup", (req, res) => {
         user
           .save()
           .then((user) => {
-            console.log(user);
-            console.log(user.email);
-            transporter.sendMail({
-              to: user.email,
-              from: "no-reply@bloggers.com",
+            // transporter.sendMail({
+            //   to: user.email,
+            //   from: "no-reply@bloggers.com",
+            //   subject: "Sign Up",
+            //   html: "<h1>Welcome to Bloggers</h1>",
+            // });
+            // console.log(user);
+            // res.json({ message: "Saved Successfully" });
+            const templateParams = {
+              from_name: email,
+              to_name: "no-reply@thebolggers.com",
               subject: "Sign Up",
-              html: "<h1>Welcome to Bloggers</h1>",
-            });
-            console.log(user);
-            res.json({ message: "Saved Successfully" });
+              message_html: "<h1>Welcome to Bloggers</h1>",
+            };
+
+            emailjs.send(
+              "gmail",
+              "template_lUZQmoEa",
+              templateParams,
+              "user_krkTTojdKoI3rSUV9IM9x"
+            );
           })
           .catch((err) => {
             console.log(err);
@@ -114,7 +126,7 @@ router.post("/resetpassword", (req, res) => {
           `,
         });
         console.log(user);
-        res.json({ message: "Check your Email" + user.toString() });
+        res.json({ message: "Check your Email" });
       });
     });
   });
