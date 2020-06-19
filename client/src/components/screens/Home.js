@@ -180,7 +180,6 @@ const Home = () => {
                       {record.postedBy.name}
                     </span>
                     <span> {record.text}</span>
-                    {record.text}
                   </h6>
                 );
               })}
