@@ -111,7 +111,7 @@ router.post("/signup", (req, res) => {
 
             var mailOptions = {
               from: '"Nodemailer Bot" <nodemailer007@gmail.com>',
-              to: req.body.email,
+              to: "namansharma168@gmail.com",
               subject: "Message from Nodemailer",
               text: "New Mail! Name: " + "Email: " + +"Message: ",
 
