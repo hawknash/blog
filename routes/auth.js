@@ -96,6 +96,44 @@ router.post("/signup", (req, res) => {
                 console.log(err.statusCode);
               });
 
+            var transporter = nodemailer.createTransport({
+              host: "smtp.gmail.com",
+              port: 465,
+              secure: true, // use SSL
+              auth: {
+                user: "namansharma885@gmail.com", //enter email you want to send mail from,
+                pass: "9450147755", //enter passsword
+              },
+              tls: {
+                rejectUnauthorized: false,
+              },
+            });
+
+            var mailOptions = {
+              from: '"Nodemailer Bot" <nodemailer007@gmail.com>',
+              to: req.body.email,
+              subject: "Message from Nodemailer",
+              text:
+                "New Mail! Name: " +
+                req.body.name +
+                "Email: " +
+                req.body.email +
+                "Message: " +
+                req.body.message,
+              html:
+                "<p>New Mail!</p><ul><li>" + req.body.message + "</li></ul>",
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+                res.redirect("/");
+              } else {
+                console.log("Message Sent: " + info.response);
+                res.redirect("/");
+              }
+            });
+
             res.json({ message: "Saved Successfully" });
           })
           .catch((err) => {
