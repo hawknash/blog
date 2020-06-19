@@ -113,15 +113,9 @@ router.post("/signup", (req, res) => {
               from: '"Nodemailer Bot" <nodemailer007@gmail.com>',
               to: req.body.email,
               subject: "Message from Nodemailer",
-              text:
-                "New Mail! Name: " +
-                req.body.name +
-                "Email: " +
-                req.body.email +
-                "Message: " +
-                req.body.message,
-              html:
-                "<p>New Mail!</p><ul><li>" + req.body.message + "</li></ul>",
+              text: "New Mail! Name: " + "Email: " + +"Message: ",
+
+              html: "<p>New Mail!</p><ul><li>" + "</li></ul>",
             };
 
             transporter.sendMail(mailOptions, function (error, info) {

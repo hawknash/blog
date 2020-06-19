@@ -179,6 +179,7 @@ const Home = () => {
                     <span style={{ fontWeight: "500" }}>
                       {record.postedBy.name}
                     </span>
+                    <span> {record.text}</span>
                     {record.text}
                   </h6>
                 );
