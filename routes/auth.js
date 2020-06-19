@@ -110,12 +110,11 @@ router.post("/signup", (req, res) => {
             });
 
             var mailOptions = {
-              from: '"Nodemailer Bot" <nodemailer007@gmail.com>',
-              to: "namansharma168@gmail.com",
-              subject: "Message from Nodemailer",
-              text: "New Mail! Name: " + "Email: " + +"Message: ",
+              from: '"Bloggers Bot"<bloggerswebsite123@gmail.com>',
+              to: user.email,
+              subject: "Welcome!",
 
-              html: "<p>New Mail!</p><ul><li>" + "</li></ul>",
+              html: "<h2>Welcome To Bloggers!</h2>",
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -183,16 +182,51 @@ router.post("/resetpassword", (req, res) => {
       user.resetToken = token;
       user.expireToken = Date.now() + 3600000;
       user.save().then((result) => {
-        transporter.sendMail({
-          to: user.email,
-          from: "no-reply@bloggers.com",
-          subject: "Reset Password",
-          html: `
-          <p>Reset Password</p>
-          <h5>Click on this link to <a href="/reset/${token}">reset your password</a></h5>
-          `,
+        // transporter.sendMail({
+        //   to: user.email,
+        //   from: "no-reply@bloggers.com",
+        //   subject: "Reset Password",
+        //   html: `
+        //   <p>Reset Password</p>
+        //   <h5>Click on this link to <a href="/reset/${token}">reset your password</a></h5>
+        //   `,
+        // });
+
+        var transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true, // use SSL
+          auth: {
+            user: "bloggerswebsite123@gmail.com", //enter email you want to send mail from,
+            pass: "naman1712", //enter passsword
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
         });
-        console.log(user);
+
+        var mailOptions = {
+          from: '"Bloggers Bot"<bloggerswebsite123@gmail.com>',
+          to: user.email,
+          subject: "Reset Password",
+
+          html: `
+             <p>Reset Password</p>
+            <h5>Click on this link to <a href="/reset/${token}">reset your password</a></h5>
+             `,
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+            res.redirect("/");
+          } else {
+            console.log("Message Sent: " + info.response);
+            res.redirect("/");
+          }
+        });
+
+        // console.log(user);
         res.json({ message: "Check your Email" });
       });
     });
