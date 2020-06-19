@@ -101,8 +101,8 @@ router.post("/signup", (req, res) => {
               port: 465,
               secure: true, // use SSL
               auth: {
-                user: "namansharma885959168@gmail.com", //enter email you want to send mail from,
-                pass: "9450147755", //enter passsword
+                user: "securesally@gmail.com", //enter email you want to send mail from,
+                pass: "satjjpaaqrwpvmko", //enter passsword
               },
               tls: {
                 rejectUnauthorized: false,
