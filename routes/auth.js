@@ -212,7 +212,7 @@ router.post("/resetpassword", (req, res) => {
 
           html: `
              <p>Reset Password</p>
-            <h5>Click on this link to <a href="/reset/${token}">reset your password</a></h5>
+            <h5>Click on this link to <a href="https://thebloggers.herokuapp.com/reset/${token}">reset your password</a></h5>
              `,
         };
 
