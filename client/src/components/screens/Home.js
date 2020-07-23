@@ -92,7 +92,7 @@ const Home = () => {
             return item;
           }
         });
-        console.log(newData);
+        // console.log(newData);
         setData(newData);
       })
       .catch((err) => {
